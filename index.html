@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+/* Apply the saved theme before the page paints, so there is no flash */
+try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}
+</script>
 <title>Payal Brand Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -174,6 +178,15 @@ footer{padding-block:28px 0;color:var(--muted);font-size:.85rem;display:flex;jus
   .pin.p-tone{left:4%!important;top:330px!important}
   .pin.p-box{right:2%!important}
 }
+/* theme toggle */
+.nav-actions{display:flex;align-items:center;gap:10px}
+.theme-toggle{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;transition:border-color .2s, transform .2s}
+.theme-toggle:hover{border-color:var(--coral);transform:rotate(-12deg)}
+.nav-actions .btn{white-space:nowrap}
+.theme-toggle .i-sun{display:none}
+.theme-toggle[data-mode="dark"] .i-sun{display:block}
+.theme-toggle[data-mode="dark"] .i-moon{display:none}
+
 /* ---------- Phone layout (added 10 Oct 2026) ---------- */
 @media (max-width:600px){
   body{padding-inline:16px}
@@ -181,7 +194,10 @@ footer{padding-block:28px 0;color:var(--muted);font-size:.85rem;display:flex;jus
   /* nav: logo + CTA on one row, links on a single scrollable row below */
   nav{display:grid;grid-template-columns:1fr auto;gap:12px 12px;padding-block:16px}
   nav .logo{font-size:1.2rem}
-  nav > .btn{padding:10px 16px;font-size:.9rem}
+  .nav-actions{gap:8px}
+  .hide-sm{display:none}
+  .nav-actions .btn{padding:10px 16px;font-size:.9rem}
+  .theme-toggle{width:40px;height:40px}
   nav .logo{white-space:nowrap}
   nav .links{grid-column:1/-1;grid-row:2;flex-wrap:nowrap;overflow-x:auto;gap:14px;font-size:.88rem;padding-bottom:2px;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 94%,transparent);mask-image:linear-gradient(90deg,#000 94%,transparent)}
   summary{padding-block:6px}
@@ -206,7 +222,8 @@ footer{padding-block:28px 0;color:var(--muted);font-size:.85rem;display:flex;jus
 }
 @media (max-width:380px){
   nav .logo{font-size:1.08rem}
-  nav > .btn{padding:9px 13px;font-size:.85rem}
+  .nav-actions .btn{padding:9px 12px;font-size:.84rem}
+  .theme-toggle{width:36px;height:36px}
   nav .links{gap:12px;font-size:.84rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -223,7 +240,13 @@ footer{padding-block:28px 0;color:var(--muted);font-size:.85rem;display:flex;jus
       <a href="#packages">Packages</a>
       <a href="#how">How it works</a>
     </div>
-    <a class="btn btn-primary cal" href="#" target="_blank" rel="noopener">Book a free call</a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode">
+        <svg class="i-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></g></svg>
+      </button>
+      <a class="btn btn-primary cal" href="#" target="_blank" rel="noopener"><span>Book a <span class="hide-sm">free </span>call</span></a>
+    </div>
   </nav>
 
   <header class="hero">
@@ -421,6 +444,27 @@ footer{padding-block:28px 0;color:var(--muted);font-size:.85rem;display:flex;jus
 </div>
 
 <script>
+/* Light / dark toggle: follows the system until the visitor picks one, then remembers it */
+(function(){
+  const root=document.documentElement, btn=document.getElementById("themeToggle");
+  const mq=window.matchMedia("(prefers-color-scheme: dark)");
+  const current=()=>root.getAttribute("data-theme")||(mq.matches?"dark":"light");
+  function paint(){
+    const mode=current();
+    btn.dataset.mode=mode;
+    btn.setAttribute("aria-label",mode==="dark"?"Switch to light mode":"Switch to dark mode");
+    btn.title=btn.getAttribute("aria-label");
+  }
+  btn.addEventListener("click",()=>{
+    const next=current()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("theme",next)}catch(e){}
+    paint();
+  });
+  mq.addEventListener("change",()=>{ if(!root.hasAttribute("data-theme")) paint(); });
+  paint();
+})();
+
 const CALENDLY = "https://calendly.com/payalsantuka/30min";
 document.querySelectorAll(".cal").forEach(a => a.href = CALENDLY);
 
