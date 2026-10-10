@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payal Brand Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: a moodboard. Pinned swatches and paper cards on a soft wall, one coral accent, handwritten notes in the margins. */
+:root{
+  --wall:#F6F1F4; --paper:#FFFFFF; --ink:#2A1B2D; --muted:#6E5F70; --line:#E6DAE2;
+  --coral:#E4566F; --coral-soft:#FBE1E6; --sage:#B9CBAE; --sage-deep:#4F6B45; --butter:#F3DB8E; --lilac:#D9CCEA; --plum:#4A2D4F;
+  --on-coral:#FFFFFF;
+  --f-display:"Gloock", "Georgia", serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-note:"Caveat", "Comic Sans MS", cursive;
+  --r:18px; --shadow:0 1px 2px rgba(42,27,45,.06), 0 10px 30px -12px rgba(42,27,45,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --wall:#1C1520; --paper:#271E2B; --ink:#F3EAF1; --muted:#B9A9B8; --line:#3B2F40;
+    --coral:#F07189; --coral-soft:#3E2230; --sage:#5E7754; --sage-deep:#C6DDB9; --butter:#8C7A3A; --lilac:#4B3D5E; --plum:#E9D6EC;
+    --on-coral:#1C1520; --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.6); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --wall:#1C1520; --paper:#271E2B; --ink:#F3EAF1; --muted:#B9A9B8; --line:#3B2F40;
+  --coral:#F07189; --coral-soft:#3E2230; --sage:#5E7754; --sage-deep:#C6DDB9; --butter:#8C7A3A; --lilac:#4B3D5E; --plum:#E9D6EC;
+  --on-coral:#1C1520; --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.6); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--wall);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;padding-inline:20px;padding-block:0 40px}
+.wrap{max-width:1120px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;line-height:1.08;text-wrap:balance;margin:0}
+h2{font-size:clamp(2rem,4.5vw,3rem)}
+h3{font-size:1.35rem}
+p{margin:0}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--coral)}
+.note{font-family:var(--f-note);font-size:1.45rem;color:var(--plum);line-height:1.1}
+.lede{color:var(--muted);max-width:60ch;font-size:1.08rem}
+section{padding-block:72px 0}
+.sec-head{display:grid;gap:12px;margin-bottom:32px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--coral);outline-offset:3px;border-radius:8px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 1rem var(--f-body);text-decoration:none;border:0;cursor:pointer;border-radius:999px;padding:14px 24px;transition:transform .2s, box-shadow .2s}
+.btn-primary{background:var(--coral);color:var(--on-coral);box-shadow:0 8px 20px -8px var(--coral)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--wall)}
+
+/* nav */
+nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:22px;flex-wrap:wrap}
+.logo{font-family:var(--f-display);font-size:1.4rem}
+.logo span{color:var(--coral)}
+nav .links{display:flex;gap:20px;flex-wrap:wrap;font-weight:500;font-size:.95rem}
+nav .links a{text-decoration:none;color:var(--muted)}
+nav .links a:hover{color:var(--ink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding-block:36px 0}
+.hero h1{font-size:clamp(2.6rem,6vw,4.6rem)}
+.hero h1 em{font-style:normal;color:var(--coral)}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:.82rem;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--paper);border:1px solid var(--line)}
+.board{position:relative;height:440px;max-width:100%}
+.pin{position:absolute;background:var(--paper);border-radius:14px;box-shadow:var(--shadow);padding:12px;transition:transform .35s ease}
+.pin:hover{transform:rotate(0deg) scale(1.03)!important;z-index:5}
+.pin::before{content:"";position:absolute;top:-7px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--coral);box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.swatches{display:grid;grid-template-columns:repeat(4,44px);gap:6px}
+.swatches i{display:block;height:64px;border-radius:8px}
+.swatch-meta{font-size:.7rem;color:var(--muted);margin-top:8px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.typecard .big{font-family:var(--f-display);font-size:3.4rem;line-height:1}
+.typecard small{display:block;font-size:.72rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.box{width:150px;height:170px;border-radius:12px;background:linear-gradient(160deg,var(--sage) 0 58%,var(--sage-deep) 58% 100%);display:grid;place-items:center;color:var(--paper);font-family:var(--f-display);font-size:1.3rem;text-align:center;line-height:1.1}
+.tone{display:grid;gap:6px;font-size:.85rem;width:190px}
+.tone div{display:flex;justify-content:space-between;gap:8px}
+.tone b{font-weight:600}
+.scale{height:6px;border-radius:9px;background:var(--line);position:relative}
+.scale span{position:absolute;top:-3px;width:12px;height:12px;border-radius:50%;background:var(--coral)}
+
+/* problems */
+.problems{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.prob{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r);padding:20px;cursor:pointer;font:inherit;color:inherit;display:grid;gap:10px;transition:border-color .2s, background .2s}
+.prob:hover{border-color:var(--coral)}
+.prob .q{font-weight:600;font-size:1.02rem;display:flex;gap:10px;align-items:flex-start}
+.prob .tick{flex:none;width:22px;height:22px;border-radius:6px;border:2px solid var(--muted);display:grid;place-items:center;font-size:.8rem;color:var(--on-coral);margin-top:2px}
+.prob[aria-pressed="true"]{background:var(--coral-soft);border-color:var(--coral)}
+.prob[aria-pressed="true"] .tick{background:var(--coral);border-color:var(--coral)}
+.prob .fix{font-size:.92rem;color:var(--muted)}
+.prob .fix b{color:var(--ink)}
+.prob[aria-pressed="false"] .fix{display:none}
+.diag{margin-top:20px;background:var(--plum);color:var(--wall);border-radius:var(--r);padding:22px 24px;display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+.diag p{max-width:60ch}
+
+/* markets + services masonry */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.chip{font:600 .9rem var(--f-body);padding:9px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--wall);border-color:var(--ink)}
+.market-note{margin:-8px 0 22px;color:var(--muted);min-height:1.6em}
+.masonry{columns:3 260px;column-gap:16px}
+.card{break-inside:avoid;margin-bottom:16px;background:var(--paper);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);display:grid;gap:10px;transition:opacity .3s, filter .3s, transform .3s;position:relative}
+.card .swatch{height:var(--h,90px);border-radius:12px;background:var(--c)}
+.card ul{margin:0;padding-left:18px;color:var(--muted);font-size:.93rem}
+.card .hot{position:absolute;top:14px;right:14px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--coral);color:var(--on-coral);padding:4px 10px;border-radius:999px}
+.card.dim{opacity:.38;filter:saturate(.3)}
+.card.lit{transform:translateY(-3px)}
+
+/* builder */
+.builder{display:grid;grid-template-columns:1.3fr .7fr;gap:20px;align-items:start}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;min-width:0}
+.opt{display:flex;gap:12px;align-items:flex-start;background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px;cursor:pointer}
+.opt input{accent-color:var(--coral);width:18px;height:18px;margin-top:3px;flex:none}
+.opt span small{display:block;color:var(--muted);font-size:.84rem}
+.opt:has(input:checked){border-color:var(--coral);background:var(--coral-soft)}
+.summary{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);background:var(--paper);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);display:grid;gap:14px;min-width:0}
+.weeks{font-family:var(--f-display);font-size:3rem;line-height:1;font-variant-numeric:tabular-nums}
+.summary ol{margin:0;padding-left:20px;color:var(--muted);font-size:.93rem}
+.summary .empty{color:var(--muted);font-size:.93rem}
+.copied{font-size:.85rem;color:var(--sage-deep);font-weight:600;min-height:1.3em}
+
+/* packages */
+.packs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.pack{background:var(--paper);border-radius:var(--r);padding:26px;display:grid;gap:14px;align-content:start;border:1.5px solid var(--line)}
+.pack.feature{border-color:var(--coral);box-shadow:var(--shadow)}
+.pack .for{color:var(--muted);font-size:.95rem}
+.pack ul{margin:0;padding-left:18px;display:grid;gap:4px;font-size:.95rem}
+.pack .time{font-weight:700;font-size:.9rem;color:var(--sage-deep)}
+
+/* why */
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.why .w{background:var(--paper);border-radius:var(--r);padding:22px;display:grid;gap:8px;border:1px solid var(--line)}
+.why .w p{color:var(--muted);font-size:.95rem}
+.zones{margin-top:20px;background:var(--paper);border-radius:var(--r);padding:22px;border:1px solid var(--line);overflow-x:auto}
+.zones table{width:100%;border-collapse:collapse;min-width:520px;font-size:.95rem}
+.zones th,.zones td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+.zones th{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.zones td{font-variant-numeric:tabular-nums}
+.zones tr:last-child td{border-bottom:0}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;counter-reset:s}
+.step{background:var(--paper);border-radius:var(--r);padding:20px;display:grid;gap:8px;border:1px solid var(--line)}
+.step::before{counter-increment:s;content:counter(s);font-family:var(--f-display);font-size:2rem;color:var(--coral);line-height:1}
+.step p{color:var(--muted);font-size:.93rem}
+
+/* faq */
+.faq{display:grid;gap:10px;max-width:780px}
+details{background:var(--paper);border-radius:14px;border:1px solid var(--line);padding:16px 20px}
+summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";font-size:1.3rem;line-height:1;color:var(--coral)}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin-top:10px}
+
+/* final */
+.final{margin-top:72px;background:var(--coral);color:var(--on-coral);border-radius:28px;padding:48px 32px;display:grid;gap:18px;justify-items:start;position:relative;overflow:hidden}
+.final h2{max-width:18ch}
+.final .btn{background:var(--wall);color:var(--ink)}
+.final .note{color:var(--on-coral)}
+footer{padding-block:28px 0;color:var(--muted);font-size:.85rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:860px){
+  .hero,.builder{grid-template-columns:1fr}
+  .board{height:400px}
+  .summary{position:static}
+}
+@media (max-width:480px){
+  .board{height:470px}
+  .pin.p-tone{left:4%!important;top:330px!important}
+  .pin.p-box{right:2%!important}
+}
+/* ---------- Phone layout (added 10 Oct 2026) ---------- */
+@media (max-width:600px){
+  body{padding-inline:16px}
+  section{padding-block:56px 0}
+  /* nav: logo + CTA on one row, links on a single scrollable row below */
+  nav{display:grid;grid-template-columns:1fr auto;gap:12px 12px;padding-block:16px}
+  nav .logo{font-size:1.2rem}
+  nav > .btn{padding:10px 16px;font-size:.9rem}
+  nav .logo{white-space:nowrap}
+  nav .links{grid-column:1/-1;grid-row:2;flex-wrap:nowrap;overflow-x:auto;gap:14px;font-size:.88rem;padding-bottom:2px;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 94%,transparent);mask-image:linear-gradient(90deg,#000 94%,transparent)}
+  summary{padding-block:6px}
+  nav .links::-webkit-scrollbar{display:none}
+  nav .links a{white-space:nowrap;padding-block:6px}
+  .hero{gap:28px;padding-block:16px 0}
+  .hero-cta .btn{flex:1 1 100%;justify-content:center}
+  /* hero moodboard: neat 2x2 grid instead of absolutely positioned pins */
+  .board{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:22px 14px;padding-top:10px}
+  .board .pin{position:relative;left:auto!important;right:auto!important;top:auto!important;min-width:0}
+  .swatches{grid-template-columns:repeat(4,1fr)}
+  .swatches i{height:48px}
+  .typecard .big{font-size:2.6rem}
+  .box{width:100%;height:auto;aspect-ratio:15/17}
+  .tone{width:100%}
+  .board .note{position:static!important;grid-column:1/-1;justify-self:center;font-size:1.3rem}
+  .diag{padding:18px}
+  .diag .btn{flex:1 1 100%;justify-content:center}
+  .final{padding:36px 22px;border-radius:22px}
+  .final .btn{width:100%;justify-content:center}
+  footer{flex-direction:column}
+}
+@media (max-width:380px){
+  nav .logo{font-size:1.08rem}
+  nav > .btn{padding:9px 13px;font-size:.85rem}
+  nav .links{gap:12px;font-size:.84rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo">Payal<span>.</span> Brand Studio</div>
+    <div class="links">
+      <a href="#services">Services</a>
+      <a href="#build">Build your kit</a>
+      <a href="#packages">Packages</a>
+      <a href="#how">How it works</a>
+    </div>
+    <a class="btn btn-primary cal" href="#" target="_blank" rel="noopener">Book a free call</a>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Brand partner for growing brands</p>
+      <h1>Your brand already has a personality. Let's make <em>everyone</em> see it.</h1>
+      <p class="lede">I help small and mid-size brands look and sound the same everywhere: packaging, catalogues, social media, launches and brand guidelines. One partner, one plan, a fixed price.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary cal" href="#" target="_blank" rel="noopener">Book a 30-min brand chat →</a>
+        <a class="btn btn-ghost" href="#build">Build your kit</a>
+      </div>
+      <div class="hero-tags">
+        <span class="tag">Brand guidelines</span><span class="tag">Packaging</span><span class="tag">Catalogues</span><span class="tag">Social media kits</span><span class="tag">Launch campaigns</span>
+      </div>
+    </div>
+
+    <div class="board" aria-hidden="true">
+      <div class="pin" style="left:2%;top:18px;transform:rotate(-4deg)">
+        <div class="swatches"><i style="background:var(--coral)"></i><i style="background:var(--butter)"></i><i style="background:var(--sage)"></i><i style="background:var(--lilac)"></i></div>
+        <div class="swatch-meta">Palette · 4 core colours</div>
+      </div>
+      <div class="pin typecard" style="right:4%;top:6px;transform:rotate(3deg)">
+        <div class="big">Aa</div><small>Headline · Body · Notes</small>
+      </div>
+      <div class="pin p-box" style="right:10%;top:170px;transform:rotate(-2deg)">
+        <div class="box">your<br>product</div>
+      </div>
+      <div class="pin p-tone" style="left:8%;top:210px;transform:rotate(2.5deg)">
+        <div class="tone">
+          <div><b>Tone of voice</b></div>
+          <div><span>Formal</span><span>Friendly</span></div><div class="scale"><span style="left:70%"></span></div>
+          <div><span>Serious</span><span>Playful</span></div><div class="scale"><span style="left:45%"></span></div>
+        </div>
+      </div>
+      <p class="note" style="position:absolute;left:44%;bottom:6px;transform:rotate(-3deg)">one brand, everywhere ♡</p>
+    </div>
+  </header>
+
+  <section id="problems">
+    <div class="sec-head">
+      <p class="eyebrow">Sound familiar?</p>
+      <h2>Tap what's true for your brand.</h2>
+      <p class="lede">Each one has a fix. Pick yours and you'll see where to start.</p>
+    </div>
+    <div class="problems" id="probs"></div>
+    <div class="diag" id="diag">
+      <p id="diagText">Tap the problems above and I'll suggest where to start.</p>
+      <a class="btn btn-primary cal" href="#" target="_blank" rel="noopener">Talk it through</a>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="sec-head">
+      <p class="eyebrow">What I do</p>
+      <h2>Everything your brand touches.</h2>
+      <p class="lede">Choose your market to see what brands there ask for most.</p>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Choose your market"></div>
+    <p class="market-note" id="marketNote"></p>
+    <div class="masonry" id="cards"></div>
+  </section>
+
+  <section id="build">
+    <div class="sec-head">
+      <p class="eyebrow">Build your kit</p>
+      <h2>Pick what you need. See how long it takes.</h2>
+      <p class="lede">Tick the pieces you want. You get a rough timeline and a list to bring to our call.</p>
+    </div>
+    <div class="builder">
+      <div class="opts" id="opts"></div>
+      <aside class="summary" aria-live="polite">
+        <p class="eyebrow">Your kit</p>
+        <div><span class="weeks" id="weeks">0</span> <span id="weeksLabel">weeks</span></div>
+        <p class="empty" id="emptyNote">Nothing picked yet. Start with the foundation pieces on the left.</p>
+        <ol id="picked"></ol>
+        <button class="btn btn-ghost" id="copyBtn" type="button">Copy my list</button>
+        <p class="copied" id="copied"></p>
+        <a class="btn btn-primary cal" href="#" target="_blank" rel="noopener">Book a call with this list →</a>
+        <p style="font-size:.82rem;color:var(--muted)">Timelines are estimates. Pieces run in parallel where they can. Final dates are set on our call.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="packages">
+    <div class="sec-head">
+      <p class="eyebrow">Packages</p>
+      <h2>Three ways to start.</h2>
+      <p class="lede">Every package is a fixed price, agreed before work starts. No hourly bills, no surprises.</p>
+    </div>
+    <div class="packs">
+      <div class="pack">
+        <p class="eyebrow">Small first step</p>
+        <h3>Brand Check-up</h3>
+        <p class="for">For brands that feel "off" but can't say why.</p>
+        <ul>
+          <li>Review of your logo, social, website, packaging</li>
+          <li>What's inconsistent and what to fix first</li>
+          <li>A clear, prioritised action list</li>
+        </ul>
+        <p class="time">About 1 week</p>
+      </div>
+      <div class="pack feature">
+        <p class="eyebrow">Most popular</p>
+        <h3>Brand Kit</h3>
+        <p class="for">For brands that need one set of rules for everyone.</p>
+        <ul>
+          <li>Colours, fonts and visual style</li>
+          <li>Tone of voice guide</li>
+          <li>Brand guidelines book</li>
+          <li>Social media templates</li>
+        </ul>
+        <p class="time">About 3–4 weeks</p>
+      </div>
+      <div class="pack">
+        <p class="eyebrow">For sales and launches</p>
+        <h3>Launch-ready</h3>
+        <p class="for">For new products, new markets or a big season.</p>
+        <ul>
+          <li>Packaging or packaging refresh</li>
+          <li>Catalogue or company profile</li>
+          <li>Launch campaign creatives</li>
+          <li>Press kit for media</li>
+        </ul>
+        <p class="time">About 4–6 weeks</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="sec-head">
+      <p class="eyebrow">Why work with me</p>
+      <h2>I've done this from inside a brand.</h2>
+      <p class="lede">I work in-house as a brand marketer at a consumer products company. That's the side you're on, so I know what actually gets used after the agency leaves.</p>
+    </div>
+    <div class="why">
+      <div class="w"><h3>I speak brand and sales</h3><p>I write product briefs for PR, manage packaging with designers, and keep catalogues and product info up to date. Pretty is not enough. It has to sell.</p></div>
+      <div class="w"><h3>One partner, a full team</h3><p>I lead strategy, tone and copy, and work with trusted designers for logo, packaging and layouts. You get one point of contact and one plan.</p></div>
+      <div class="w"><h3>Fixed price, clear steps</h3><p>You know the cost, the deliverables and the dates before we start. Two rounds of changes are included in every piece.</p></div>
+      <div class="w"><h3>Made to be used</h3><p>Every file comes editable, with simple rules your team can follow without calling me.</p></div>
+    </div>
+    <div class="zones">
+      <p class="eyebrow" style="margin-bottom:8px">Working hours overlap · I'm in New Delhi (IST)</p>
+      <table>
+        <thead><tr><th>You're in</th><th>Time difference</th><th>Best time to talk</th></tr></thead>
+        <tbody>
+          <tr><td>India</td><td>Same time zone</td><td>Any time in your working day</td></tr>
+          <tr><td>Dubai / Abu Dhabi</td><td>India is 1.5 hrs ahead</td><td>Any time in your working day</td></tr>
+          <tr><td>London</td><td>India is 4.5–5.5 hrs ahead</td><td>Your morning to early afternoon</td></tr>
+          <tr><td>Sydney / Melbourne</td><td>India is 4.5–5.5 hrs behind</td><td>Your afternoon</td></tr>
+          <tr><td>New York / Toronto</td><td>India is 9.5–10.5 hrs ahead</td><td>Your early morning</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="sec-head">
+      <p class="eyebrow">How it works</p>
+      <h2>From first call to final files.</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Free 30-min call</h3><p>You tell me about your brand, your buyers and what's not working.</p></div>
+      <div class="step"><h3>Proposal in 48 hours</h3><p>Fixed price, what you get, and the dates. Nothing starts until you say yes.</p></div>
+      <div class="step"><h3>Moodboard first</h3><p>We agree on the look and feel before any final design is made.</p></div>
+      <div class="step"><h3>Design and refine</h3><p>Weekly updates. Two rounds of changes on every piece.</p></div>
+      <div class="step"><h3>Handover</h3><p>Editable files, a simple guide for your team, and a check-in after 30 days.</p></div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="sec-head">
+      <p class="eyebrow">Questions</p>
+      <h2>Before you book.</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Do you design logos yourself?</summary><p>I lead the brand thinking, tone, copy and the overall direction. For logo and detailed packaging artwork, I work with designers I trust and manage them for you, so you only deal with me.</p></details>
+      <details><summary>How much does it cost?</summary><p>Every project is a fixed price based on what you need. Use "Build your kit" above, bring the list to our call, and you'll get a written quote within 48 hours.</p></details>
+      <details><summary>We're a small business. Is this for us?</summary><p>Yes. The Brand Check-up was made for small brands that want to start small and see results before spending more.</p></details>
+      <details><summary>Can you do English + Arabic, or English + French?</summary><p>Yes, I can arrange bilingual versions with a native-language partner. Tell me on the call so it's in the plan from day one.</p></details>
+      <details><summary>How do we pay?</summary><p>Usually 50% to start and 50% on handover. International payments are fine.</p></details>
+    </div>
+  </section>
+
+  <div class="final">
+    <p class="note">no pressure, just a chat ☕</p>
+    <h2>Let's make your brand look like it means it.</h2>
+    <p style="max-width:55ch">30 minutes, free. You'll leave with at least one thing you can fix this week, whether we work together or not.</p>
+    <a class="btn cal" href="#" target="_blank" rel="noopener">Book your call on Calendly →</a>
+  </div>
+
+  <footer>
+    <span>Payal. Brand Studio · New Delhi, working worldwide</span>
+    <span>Brand strategy · Identity · Packaging · Catalogues · Social · Launches</span>
+  </footer>
+</div>
+
+<script>
+const CALENDLY = "https://calendly.com/payalsantuka/30min";
+document.querySelectorAll(".cal").forEach(a => a.href = CALENDLY);
+
+/* Problems → fixes */
+const PROBLEMS = [
+  {q:"Our social posts all look different", fix:"Social media kit", detail:"templates so every post looks like you"},
+  {q:"Our packaging looks dated next to competitors", fix:"Packaging refresh", detail:"modern look, same brand recognition"},
+  {q:"Every designer uses our logo differently", fix:"Brand guidelines", detail:"one rulebook for colours, fonts and logo use"},
+  {q:"Our catalogue or company profile is old", fix:"Catalogue / company profile", detail:"a sales tool your team is proud to send"},
+  {q:"We don't know how our brand should 'sound'", fix:"Tone of voice guide", detail:"how you write, with do's and don'ts"},
+  {q:"We're launching something soon", fix:"Launch campaign kit", detail:"teasers, launch creatives and a press kit"}
+];
+const probsEl = document.getElementById("probs");
+PROBLEMS.forEach((p,i)=>{
+  const b=document.createElement("button");
+  b.className="prob";b.type="button";b.id="prob-"+i;b.setAttribute("aria-pressed","false");
+  b.innerHTML=`<span class="q"><span class="tick">✓</span>${p.q}</span><span class="fix">Fix: <b>${p.fix}</b>, ${p.detail}.</span>`;
+  b.addEventListener("click",()=>{b.setAttribute("aria-pressed",b.getAttribute("aria-pressed")==="true"?"false":"true");diagnose();});
+  probsEl.appendChild(b);
+});
+function diagnose(){
+  const on=[...probsEl.querySelectorAll('[aria-pressed="true"]')].map(b=>PROBLEMS[+b.id.split("-")[1]]);
+  const t=document.getElementById("diagText");
+  if(!on.length){t.textContent="Tap the problems above and I'll suggest where to start.";return;}
+  if(on.length>=3){t.innerHTML=`You ticked ${on.length}. That usually means the foundation is missing. Start with the <b>Brand Kit</b>, then the rest gets faster and cheaper.`;return;}
+  t.innerHTML=`Start with: <b>${on.map(o=>o.fix).join("</b> + <b>")}</b>. We can scope it on a 30-min call.`;
+}
+
+/* Services + markets */
+const MARKETS = {
+  all:{label:"All markets",note:""},
+  uae:{label:"UAE",note:"Brands in the UAE most often ask for company profiles, catalogues, luxury packaging and bilingual (English + Arabic) material."},
+  aus:{label:"Australia",note:"Australian small businesses most often ask for quick identity packages, café and hospitality branding, and social kits."},
+  uk:{label:"UK",note:"UK brands most often ask for brand refreshes, guidelines with a strong tone of voice, and sustainable packaging."},
+  usa:{label:"USA",note:"US startups and D2C brands most often ask for full identity kits, positioning and messaging, packaging and pitch decks."},
+  can:{label:"Canada",note:"Canadian brands most often ask for startup identity kits, food and beverage packaging, and bilingual (English + French) material."},
+  ind:{label:"India",note:"Indian D2C brands and manufacturers most often ask for packaging, catalogues and company profiles, social media kits, and festive launch campaigns."}
+};
+const SERVICES = [
+  {t:"Brand guidelines",d:"One rulebook for how your brand looks and sounds.",li:["Logo usage rules","Colours and fonts","Do's and don'ts"],c:"var(--lilac)",h:70,m:["uae","aus","uk","usa","can"]},
+  {t:"Packaging",d:"Boxes, labels and pouches that stand out on the shelf.",li:["New packaging or refresh","Labels, tags, stickers","Gift and festive packs"],c:"var(--sage)",h:130,m:["uae","uk","usa","can","ind"]},
+  {t:"Catalogue & company profile",d:"The documents your sales team sends every day.",li:["Product catalogue (print + PDF)","Company profile","Sell sheets for dealers"],c:"var(--butter)",h:100,m:["uae","ind"]},
+  {t:"Social media kit",d:"Templates so every post looks like the same brand.",li:["Post and story templates","Highlight covers","Profile and banners"],c:"var(--coral-soft)",h:80,m:["aus","uk","usa","ind"]},
+  {t:"Tone of voice",d:"How your brand writes, from captions to emails.",li:["Voice guide with examples","Taglines and key messages","Website and 'About us' copy"],c:"var(--lilac)",h:60,m:["uk","usa"]},
+  {t:"Brand identity kit",d:"The full foundation for new or growing brands.",li:["Logo direction (with designer)","Colour palette and fonts","Stationery and email signature"],c:"var(--sage)",h:110,m:["aus","usa","can"]},
+  {t:"Launch campaigns",d:"Everything you need to make noise for something new.",li:["Teaser and launch creatives","Festive campaigns","Press kit for media"],c:"var(--coral-soft)",h:90,m:["uae","usa","ind"]},
+  {t:"Café & retail branding",d:"Where customers meet your brand in person.",li:["Menus and signage","Cups, bags, uniforms","Store and stall graphics"],c:"var(--butter)",h:120,m:["aus","uae"]},
+  {t:"Pitch & sales decks",d:"Decks that make investors and buyers say yes.",li:["Investor pitch deck","Sales presentation","PPT template for your team"],c:"var(--lilac)",h:70,m:["usa","can"]},
+  {t:"Bilingual brand material",d:"Your brand, right in two languages.",li:["English + Arabic","English + French","Packaging, catalogues, social"],c:"var(--sage)",h:60,m:["uae","can"]},
+  {t:"Brand check-up",d:"A quick review to find what's holding your brand back.",li:["Review of all touchpoints","Priority fix list","1 week"],c:"var(--butter)",h:70,m:["uk","aus"]}
+];
+const cardsEl=document.getElementById("cards");
+SERVICES.forEach((s,i)=>{
+  const el=document.createElement("article");el.className="card";el.dataset.m=s.m.join(" ");
+  el.innerHTML=`<span class="hot" hidden>Most asked</span><div class="swatch" style="--c:${s.c};--h:${s.h}px"></div><h3>${s.t}</h3><p style="color:var(--muted)">${s.d}</p><ul>${s.li.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+  cardsEl.appendChild(el);
+});
+const chipsEl=document.getElementById("chips");
+Object.entries(MARKETS).forEach(([k,v])=>{
+  const c=document.createElement("button");c.className="chip";c.type="button";c.id="chip-"+k;c.textContent=v.label;
+  c.setAttribute("aria-pressed",k==="all"?"true":"false");
+  c.addEventListener("click",()=>setMarket(k));chipsEl.appendChild(c);
+});
+function setMarket(k){
+  chipsEl.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c.id==="chip-"+k?"true":"false"));
+  document.getElementById("marketNote").textContent=MARKETS[k].note;
+  cardsEl.querySelectorAll(".card").forEach(c=>{
+    const hit=k!=="all"&&c.dataset.m.split(" ").includes(k);
+    c.classList.toggle("dim",k!=="all"&&!hit);c.classList.toggle("lit",hit);
+    c.querySelector(".hot").hidden=!hit;
+  });
+  try{localStorage.setItem("market",k)}catch(e){}
+}
+try{const saved=localStorage.getItem("market");if(saved&&MARKETS[saved])setMarket(saved)}catch(e){}
+
+/* Kit builder */
+const OPTS=[
+  {id:"o-guide",t:"Brand guidelines",s:"Foundation",d:10},
+  {id:"o-tone",t:"Tone of voice guide",s:"Foundation",d:5},
+  {id:"o-ident",t:"Colours, fonts & logo direction",s:"Foundation",d:10},
+  {id:"o-pack",t:"Packaging (per product line)",s:"Product",d:15},
+  {id:"o-cat",t:"Catalogue",s:"Sales",d:12},
+  {id:"o-prof",t:"Company profile",s:"Sales",d:8},
+  {id:"o-social",t:"Social media kit",s:"Digital",d:6},
+  {id:"o-launch",t:"Launch campaign creatives",s:"Campaign",d:8},
+  {id:"o-press",t:"Press kit",s:"Campaign",d:4},
+  {id:"o-deck",t:"Pitch or sales deck",s:"Sales",d:6},
+  {id:"o-stat",t:"Visiting cards & stationery",s:"Office",d:3},
+  {id:"o-audit",t:"Brand check-up",s:"Start small",d:5}
+];
+const optsEl=document.getElementById("opts");
+OPTS.forEach(o=>{
+  const l=document.createElement("label");l.className="opt";
+  l.innerHTML=`<input type="checkbox" id="${o.id}"><span><b>${o.t}</b><small>${o.s} · ~${o.d} working days</small></span>`;
+  l.querySelector("input").addEventListener("change",calc);optsEl.appendChild(l);
+});
+function calc(){
+  const sel=OPTS.filter(o=>document.getElementById(o.id).checked);
+  const total=sel.reduce((a,o)=>a+o.d,0);
+  // pieces overlap: longest piece + 40% of the rest
+  const longest=sel.reduce((a,o)=>Math.max(a,o.d),0);
+  const days=sel.length?longest+0.4*(total-longest):0;
+  const w=sel.length?Math.max(1,Math.ceil(days/5)):0;
+  document.getElementById("weeks").textContent=sel.length?"~"+w:"0";
+  document.getElementById("weeksLabel").textContent=w===1?"week":"weeks";
+  document.getElementById("picked").innerHTML=sel.map(o=>`<li>${o.t}</li>`).join("");
+  document.getElementById("emptyNote").hidden=!!sel.length;
+  document.getElementById("copied").textContent="";
+}
+document.getElementById("copyBtn").addEventListener("click",()=>{
+  const sel=OPTS.filter(o=>document.getElementById(o.id).checked).map(o=>"- "+o.t);
+  const msg=document.getElementById("copied");
+  if(!sel.length){msg.textContent="Pick at least one piece first.";return;}
+  const text="My brand kit:\n"+sel.join("\n");
+  const fallback=()=>{msg.textContent="Couldn't copy here. Select the list above and copy it.";};
+  try{navigator.clipboard.writeText(text).then(()=>{msg.textContent="Copied. Paste it into the Calendly notes.";},fallback);}catch(e){fallback();}
+});
+// sample starting state
+["o-guide","o-social"].forEach(id=>document.getElementById(id).checked=true);calc();
+</script>
+</body>
+</html>
