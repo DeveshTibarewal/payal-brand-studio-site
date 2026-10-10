@@ -1,0 +1,76 @@
+name: Check and deploy site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Check page
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Required tags are present
+        run: |
+          set -e
+          f=index.html
+          fail=0
+          check() { grep -qi "$1" "$f" && echo "ok   $2" || { echo "FAIL $2"; fail=1; }; }
+          check '<!doctype html>'                    'doctype'
+          check '<html lang='                        'html lang attribute'
+          check '<meta charset='                     'charset meta'
+          check 'name="viewport"'                    'viewport meta (phone layout)'
+          check '<title>'                            'page title'
+          check 'calendly.com/'                      'Calendly booking link'
+          exit $fail
+
+      - name: Private folders are not in the repo
+        run: |
+          for d in _client _drafts; do
+            if [ -e "$d" ]; then echo "FAIL $d/ must stay out of the public repo"; exit 1; fi
+          done
+          echo "ok   no _client/ or _drafts/"
+
+      - name: Validate HTML
+        run: npx --yes html-validate@8.18.2 --config .github/html-validate.json index.html
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: check
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect site files
+        run: |
+          mkdir _site
+          cp index.html _site/
+          cp -r assets _site/
+          for f in favicon.ico policies.html robots.txt sitemap.xml; do
+            [ -e "$f" ] && cp "$f" _site/ || true
+          done
+          find _site -name .gitkeep -delete
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
